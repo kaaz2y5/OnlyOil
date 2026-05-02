@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OnlyOil Vehicle Lookup</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="lookup-panel" aria-labelledby="app-title">
+      <div class="brand-row">
+        <div>
+          <p class="eyebrow">Offline mobile oil change field tool</p>
+          <h1 id="app-title">OnlyOil Lookup</h1>
+        </div>
+        <button class="icon-button" id="themeToggle" type="button" title="Toggle theme" aria-label="Toggle theme">◐</button>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Lookup mode">
+        <button class="tab active" type="button" data-tab="vin">VIN</button>
+        <button class="tab" type="button" data-tab="vehicle">Vehicle</button>
+        <button class="tab" type="button" data-tab="add">Add Spec</button>
+      </div>
+
+      <form class="tab-panel active" id="vinPanel" data-panel="vin">
+        <label for="vinInput">VIN</label>
+        <div class="input-row">
+          <input id="vinInput" name="vin" maxlength="17" autocomplete="off" placeholder="17-character VIN">
+          <button type="submit">Decode</button>
+        </div>
+        <p class="hint">VIN decode is optional and needs internet. Your oil specs are saved on this device and work offline.</p>
+      </form>
+
+      <form class="tab-panel" id="vehiclePanel" data-panel="vehicle">
+        <label for="quickSearch">Fast catalog search
+          <input id="quickSearch" autocomplete="off" placeholder="Try: 2020 Camry 2.5 or Honda Accord">
+        </label>
+        <div class="grid-two">
+          <label>Year
+            <input id="yearInput" inputmode="numeric" placeholder="2020">
+          </label>
+          <label>Make
+            <input id="makeInput" placeholder="Toyota">
+          </label>
+        </div>
+        <label>Model
+          <input id="modelInput" placeholder="Camry">
+        </label>
+        <label>Engine or trim
+          <input id="engineInput" placeholder="2.5L, Hybrid, V6...">
+        </label>
+        <button type="submit">Find Oil Spec</button>
+      </form>
+
+      <form class="tab-panel" id="addPanel" data-panel="add">
+        <div class="grid-two">
+          <label>Year
+            <input id="specYear" inputmode="numeric" required>
+          </label>
+          <label>Make
+            <input id="specMake" required>
+          </label>
+        </div>
+        <label>Model
+          <input id="specModel" required>
+        </label>
+        <label>Engine
+          <input id="specEngine" required placeholder="2.5L I4">
+        </label>
+        <div class="grid-two">
+          <label>Oil type
+            <input id="specOil" required placeholder="0W-20 full synthetic">
+          </label>
+          <label>Capacity
+            <input id="specCapacity" required placeholder="4.8 qt with filter">
+          </label>
+        </div>
+        <div class="grid-two">
+          <label>Oil filter
+            <input id="specFilter" required placeholder="OEM / Wix / Fram part number">
+          </label>
+          <label>Source
+            <input id="specSource" placeholder="Owner manual, service data, invoice">
+          </label>
+        </div>
+        <label>Notes
+          <textarea id="specNotes" rows="3" placeholder="Drain plug gasket, reset steps, torque, special access..."></textarea>
+        </label>
+        <button type="submit">Save Verified Spec</button>
+      </form>
+    </section>
+
+    <section class="result-panel" aria-live="polite">
+      <div class="status-card" id="statusCard">
+        <p class="eyebrow">Ready</p>
+        <h2>Look up a vehicle to start.</h2>
+        <p>Search your saved offline catalog by vehicle. Missing vehicles can be added once you verify the spec.</p>
+      </div>
+
+      <div class="result-card hidden" id="vehicleCard">
+        <div class="result-header">
+          <div>
+            <p class="eyebrow" id="matchType">Matched spec</p>
+            <h2 id="vehicleTitle"></h2>
+            <p id="vehicleSubtitle"></p>
+          </div>
+          <span class="badge" id="confidenceBadge"></span>
+        </div>
+        <div class="spec-grid">
+          <div>
+            <span>Oil</span>
+            <strong id="oilType"></strong>
+          </div>
+          <div>
+            <span>Capacity</span>
+            <strong id="capacity"></strong>
+          </div>
+          <div>
+            <span>Filter</span>
+            <strong id="filter"></strong>
+          </div>
+        </div>
+        <p class="source-line" id="sourceLine"></p>
+        <p class="notes" id="notesLine"></p>
+      </div>
+
+      <form class="job-card" id="jobForm">
+        <div class="section-title">
+          <h2>Job Card</h2>
+          <button type="button" id="copyJob">Copy</button>
+        </div>
+        <div class="grid-two">
+          <label>Customer
+            <input id="customerName" placeholder="Name">
+          </label>
+          <label>Mileage
+            <input id="mileage" inputmode="numeric" placeholder="125000">
+          </label>
+        </div>
+        <label>Address / appointment
+          <input id="appointment" placeholder="Where and when">
+        </label>
+        <label>Service notes
+          <textarea id="jobNotes" rows="6"></textarea>
+        </label>
+      </form>
+
+      <section class="catalog-card">
+        <div class="section-title">
+          <h2>Saved Specs</h2>
+          <div class="button-cluster">
+            <button type="button" id="exportSpecs">Export</button>
+            <button type="button" id="exportCsv">CSV</button>
+            <label class="file-button">Import
+              <input type="file" id="importSpecs" accept="application/json,.json,.csv,text/csv">
+            </label>
+          </div>
+        </div>
+        <div class="saved-list" id="savedList"></div>
+      </section>
+    </section>
+  </main>
+
+  <template id="savedItemTemplate">
+    <article class="saved-item">
+      <div>
+        <strong></strong>
+        <span></span>
+      </div>
+      <button type="button">Use</button>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
